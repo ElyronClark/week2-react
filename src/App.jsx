@@ -6,7 +6,7 @@ function App() {
   const [newSkill, setNewSkill] = useState('')
 
   useEffect(() => {
-    fetch('week2-express-production.up.railway.app/skills')
+    fetch('https://week2-express-production.up.railway.app/skills')
       .then(res => res.json())
       .then(data => {
         setSkills(data.skills)
@@ -16,7 +16,7 @@ function App() {
 
   const addSkill = async () => {
     if (!newSkill) return
-    const response = await fetch('week2-express-production.up.railway.app/skills', {
+    const response = await fetch('https://week2-express-production.up.railway.app/skills', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ skill: newSkill })
