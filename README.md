@@ -13,7 +13,11 @@ A full stack React app connected to an Express backend.
 3. Run: `npm run dev`
 4. Open: `http://localhost:5173`
 
+## Live Demo
+https://week2-react.vercel.app
+
 ## Stack 
 - React 18
 - Vite
 - Express (backend — see week2-express repo)
+- Vercel (deployment)
