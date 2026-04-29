@@ -1,37 +1,47 @@
 import { useState, useEffect } from 'react'
 
-function useFetch(url) {
-  const [data, setData] = useState(null)
+function App() {
+  const [skills, setSkills] = useState([])
   const [loading, setLoading] = useState(true)
+  const [newSkill, setNewSkill] = useState('')
 
   useEffect(() => {
-    fetch(url)
-    .then(rest => rest.json())
-    .then(result => {
-      setData(result)
-      setLoading(false)
+    fetch('http://localhost:3001/skills')
+      .then(res => res.json())
+      .then(data => {
+        setSkills(data.skills)
+        setLoading(false)
+      })
+  }, [])
+
+  const addSkill = async () => {
+    if (!newSkill) return
+    const response = await fetch('http://localhost:3001/skills', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ skill: newSkill })
     })
-  }, [url])
-
-  return {data, loading}
-}
-
-function App() {
-  const [count, setCount] = useState(0)
-  const [jokeKey, setJokeKey] = useState(0)
-  const { data: joke, loading} = useFetch(`https://official-joke-api.appspot.com/random_joke?k=${jokeKey}`)
+    const data = await response.json()
+    setSkills(data.skills)
+    setNewSkill('')
+  }
 
   return (
     <div>
-      <h1> Hello React</h1>
-      {loading ? <p>Loading joke...</p> : <p>{joke.setup} — {joke.punchline}</p>}
-      <p>Count: {count}</p>
-      <button onClick={() => { setCount(count + 1); setJokeKey(jokeKey + 1)}}>
-        Add 1
-      </button>
-      <button onClick={() => setCount(0)}>
-        Reset Count
-      </button>
+      <h1>My Skills</h1>
+      {loading ? <p>Loading...</p> : (
+        <ul>
+          {skills.map(skill => (
+            <li key={skill}>{skill}</li>
+          ))}
+        </ul>
+      )}
+      <input
+        value={newSkill}
+        onChange={e => setNewSkill(e.target.value)}
+        placeholder="Add a skill"
+      />
+      <button onClick={addSkill}>Add</button>
     </div>
   )
 }
